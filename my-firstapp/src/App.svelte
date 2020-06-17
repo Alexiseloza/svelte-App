@@ -1,35 +1,41 @@
 <script>
-  export let name, age;
+  export let name;
+  let points = 50;
+  const showControls = true;
+
+  const addPoint = () => (points += 1);
+  const removePoint = () => (points -= 1);
+  const toggleControls = () => (showControls = !showControls);
 </script>
 
 <style>
-  main {
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
-  }
-
   h1 {
-    color: #0511ac;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
+    color: blue;
   }
 
   @media (min-width: 640px) {
     main {
-      max-width: none;
+      max-width: 100vh;
     }
   }
 </style>
 
-<main>
-  <h1>Hello {name}!</h1>
-  <h3>Your Age is:{age}!</h3>
-  <p>
-    Visit the
-    <a href="https://svelte.dev/tutorial">Svelte tutorial</a>
-    to learn how to build Svelte apps.
-  </p>
+<main class="container">
+  <div class="card">
+    <h1>
+      {name}
+      <button class="btn btn-sm" on:click={toggleControls}>
+        {#if showControls}-{:else}+{/if}
+      </button>
+    </h1>
+    <h3 class="text-center mb-5">Your Points: {points}!</h3>
+    {#if showControls}
+      <button class="btn btn-success" on:click={addPoint}>+1</button>
+      <button class="btn btn-warning" on:click={removePoint}>-1</button>
+
+      <input class="my-3" type="number" bind:value={points} />
+    {/if}
+
+  </div>
+
 </main>
