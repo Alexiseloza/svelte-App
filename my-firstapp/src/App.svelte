@@ -1,18 +1,30 @@
 <script>
-  export let name;
-  let points = 50;
-  const showControls = true;
+  import MovieItem from "./Movie/Item.svelte";
+  import { onMount } from "svelte";
 
-  const addPoint = () => (points += 1);
-  const removePoint = () => (points -= 1);
-  const toggleControls = () => (showControls = !showControls);
+  const APIKEY = "4d34fed296059cb1dd1ba88983ebbd3e";
+  const BASEURL = `https://api.themoviedb.org/3`;
+  const APISETTINGS = `?api_key=${APIKEY}&language=es-MX`;
+  let movies = [];
+
+  function fetchMovies() {
+    const URL = `${BASEURL}/discover/movie${APISETTINGS}&sort_by=popularity.desc`;
+
+    fetch(URL)
+      .then(res => res.json())
+      .then(({ results }) => {
+        movies = results;
+        console.log(results);
+      });
+  }
+
+  onMount(() => {
+    console.log("the component has mounted");
+    fetchMovies();
+  });
 </script>
 
 <style>
-  h1 {
-    color: blue;
-  }
-
   @media (min-width: 640px) {
     main {
       max-width: 100vh;
@@ -20,21 +32,27 @@
   }
 </style>
 
-<main class="container">
-  <div class="card">
-    <h1>
-      {name}
-      <button class="btn btn-sm" on:click={toggleControls}>
-        {#if showControls}-{:else}+{/if}
-      </button>
-    </h1>
-    <h3 class="text-center mb-5">Your Points: {points}!</h3>
-    {#if showControls}
-      <button class="btn btn-success" on:click={addPoint}>+1</button>
-      <button class="btn btn-warning" on:click={removePoint}>-1</button>
+<svelte:head>
+  <title>Movies API with Svelte JS | powered Alexis</title>
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+    crossorigin="anonymous" />
+</svelte:head>
 
-      <input class="my-3" type="number" bind:value={points} />
-    {/if}
+<main class="container">
+  <div class="row">
+    {#each movies as movie}
+      <div class="col-12 col-md-6 col-lg-3 p-2">
+        <MovieItem
+          id={movie.id}
+          title={movie.title}
+          overview={movie.overview}
+          release_date={movie.release_date}
+          cover={movie.poster_path} />
+      </div>
+    {/each}
 
   </div>
 
