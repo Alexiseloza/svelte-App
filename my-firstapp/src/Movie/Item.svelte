@@ -28,7 +28,7 @@
   <img src={coverURL} class="card-img-top" alt="Movie " />
   <div class="card-body">
     <h5 class="card-title">{title}</h5>
-    <h6 class="card-text">ID:{id}</h6>
+
     <p class="card-text">
       <span class="font-weight-bold">Description Movie:</span>
       {overview}
